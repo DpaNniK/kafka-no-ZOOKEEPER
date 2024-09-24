@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+  kafka:
+    image: bitnami/kafka:latest
+    environment:
+      KAFKA_CFG_NODE_ID: 1
+      #Компонент KRaft, благодаря ему не используется ZOOKEEPER
+      KAFKA_KRAFT_CLUSTER_ID: t-one-school-demo
+      #broker - тот, кто принимает/отправляет сообщения
+      #controller - роль сервера, управляет метаданными сервера
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      #Объявление контроллера, обращаясь к текущему образу.
+      #Состоит из NODE_ID, имени образа и порта, на котором открыт контроллер
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      #Объявление портов, которые присваиваем серверу
+      #PLAINTEXT - внутренний порт для брокера
+      #CONTROLLER - для контроллера, именно он пришел на замену ZOOKEEPER.
+      #В режиме KRaft один из брокеров выполняет роль контроллера, который отвечает за координацию работы всего кластера, распределение лидеров топиков и управление метаданными.
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093, EXTERNAL://:9094
+      #Определение порта, по которому клиенты смогут достучаться до брокера
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092, EXTERNAL://localhost:9094
+      #Настройка security протокола
+      #Здесь можно настроить кодировку, например, SSL, в данной реализации просто прокидывается текст
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      #Задаем имя контроллера (выше везде использовался он)
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      #Задаем имя брокера (также выше использовался он)
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      #Тут будем хранить логи кафки
+      KAFKA_CFG_LOG_DIRS: /var/lib/kafka/data
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+      - "9094:9094"
+    #После перезапуска контейнера, все будет ок - данные и так не пропадут, но
+    #volumes настраиваем для того, чтобы после удаления контейнера сработал дамп
+    volumes:
+      - ./kafka-data:/var/lib/kafka/data
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    ports:
+      - "8080:8080"
+    links:
+      - kafka

@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: kafka_t-one_school
+  kafka:
+    producer:
+      client-id: tOneGroupSchool
+    consumer:
+      group-id: tOneGroupSchool
+      enable-auto-commit: false
+    topic:
+      t-one: tOneGroupSchoolTopic
+    bootstrap-servers: localhost:9094
+logging:
+  level:
+    org.apache.kafka: INFO
+    org.springframework.kafka: DEBUG
+server:
+  port: 8888
