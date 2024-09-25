@@ -16,3 +16,6 @@ logging:
     org.springframework.kafka: DEBUG
 server:
   port: 8888
+springdoc:
+  swagger-ui:
+    path: /kafka-api/swagger-ui
