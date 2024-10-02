@@ -34,6 +34,14 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.2.23'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.0.3'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: '6.6.1.Final'
+    implementation group: 'org.hibernate', name: 'hibernate-validator', version: '8.0.0.Final'
+    implementation group: 'org.liquibase', name: 'liquibase-core', version: '4.29.2'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
+    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.6.2'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.2'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.17.2'
 }
 
 tasks.named('test') {
