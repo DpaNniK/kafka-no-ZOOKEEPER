@@ -1,21 +1,47 @@
 spring:
   application:
     name: kafka_t-one_school
+
   kafka:
     producer:
       client-id: tOneGroupSchool
     consumer:
       group-id: tOneGroupSchool
       enable-auto-commit: false
+      auto-offset-reset: earliest
     topic:
-      t-one: tOneGroupSchoolTopic
+      t-one: t_one_group_school_topic
+      account: t1_demo_accounts
+      transaction: t1_demo_transactions
+      trace: t1_demo_metric_trace
+      error-trace: t1_demo_error_trace
     bootstrap-servers: localhost:9094
+
+  datasource:
+    url: jdbc:postgresql://127.0.0.11:5432/t_one_db
+    username: admin
+    password: root
+
+  jpa:
+    show-sql: true
+
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+
 logging:
   level:
     org.apache.kafka: INFO
     org.springframework.kafka: DEBUG
+
 server:
   port: 8888
+
 springdoc:
   swagger-ui:
     path: /kafka-api/swagger-ui
+
+metric:
+  execution:
+    time:
+      limitMs: 1000
+      limitSec: 1

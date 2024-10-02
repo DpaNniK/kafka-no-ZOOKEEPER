@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: "1"
+      author: drunya
+      changes:
+        - sqlFile:
+            path: DDL/001_create_base_tables.sql
+            relativeToChangelogFile: true
+
+  - changeSet:
+      id: "2"
+      author: drunya
+      changes:
+        - sqlFile:
+            path: DML/001_init_client.sql
+            relativeToChangelogFile: true

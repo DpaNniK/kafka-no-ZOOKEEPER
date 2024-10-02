@@ -46,3 +46,18 @@ services:
       - "8080:8080"
     links:
       - kafka
+
+  t-one-db:
+    container_name: t-one-db
+    image: postgres:17
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=t_one_db
+    command: [ "--autovacuum=off" ]
+    volumes:
+      - /t-one-db-volume:/var/lib/postgresql/data
+      - ./dump:/home/postgres/dump
+    ports:
+      - "127.0.0.11:5432:5432"
